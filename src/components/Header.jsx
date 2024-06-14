@@ -90,15 +90,15 @@ const Header = () => {
           </div>
         </div>
         <div className="flex items-center justify-end w-1/5">
-          <a href="/" className="hover:bg-white hover:text-red-500 hover:rounded-full p-2 mr-2 hidden sm:block">
+          <Link to="/" className="hover:bg-white hover:text-red-500 hover:rounded-full p-2 mr-2 hidden sm:block">
             <FaUser />
-          </a>
-          <a href="/cart" className="flex items-center flex-row hover:bg-white hover:text-red-500 hover:rounded-full p-2">
+          </Link>
+          <Link to="/cart" className="flex items-center flex-row hover:bg-white hover:text-red-500 hover:rounded-full p-2">
             <FaCartShopping />
             {cartItems.length > 0 && (
               <span className="bg-white text-red-500 rounded-full text-xs px-[6px] py-[2px] ml-1">{cartItems.length}</span>
             )}
-          </a>
+          </Link>
           <button onClick={toggleMenu} className="sm:hidden hover:bg-white p-2 hover:text-red-500 rounded-full">
             <FaAlignJustify />
           </button>
