@@ -3,7 +3,7 @@ import { updateCart } from '../utils/cartUtils';
 
 const initialState = localStorage.getItem('cart')
   ? JSON.parse(localStorage.getItem('cart'))
-  : { cartItems: [], shippingAdress: {}, paymentMethod: 'CreditCart' };
+  : { cartItems: [], shippingAddress: {}, paymentMethod: 'CreditCard' };
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -14,29 +14,34 @@ const cartSlice = createSlice({
       const existItem = state.cartItems.find((x) => x.primary_isbn10 === item.primary_isbn10);
 
       if (existItem) {
-        state.cartItems = state.cartItems.map((x) => (x.primary_isbn10 === existItem.primary_isbn10 ? { ...item, qty: x.qty + item.qty } : x));
+        const newQty = existItem.qty + item.qty;
+        if (newQty <= 0) {
+          state.cartItems = state.cartItems.filter((x) => x.primary_isbn10 !== item.primary_isbn10);
+        } else {
+          state.cartItems = state.cartItems.map((x) =>
+            x.primary_isbn10 === existItem.primary_isbn10 ? { ...x, qty: newQty } : x
+          );
+        }
       } else {
-        state.cartItems = [...state.cartItems, item];
+        state.cartItems.push(item);
       }
-      return updateCart(state);
+      updateCart(state);
     },
-    removeFromCart(state, action) {
+    removeFromCart: (state, action) => {
       state.cartItems = state.cartItems.filter((x) => x.primary_isbn10 !== action.payload);
-
-      return updateCart(state);
+      updateCart(state);
     },
-    saveShippingAddress(state, action) {
+    saveShippingAddress: (state, action) => {
       state.shippingAddress = action.payload;
-
-      return updateCart(state);
+      updateCart(state);
     },
-    savePaymentMethod(state, action) {
+    savePaymentMethod: (state, action) => {
       state.paymentMethod = action.payload;
-      return updateCart(state);
+      updateCart(state);
     },
-    clearCartItems(state) {
+    clearCartItems: (state) => {
       state.cartItems = [];
-      return updateCart(state);
+      updateCart(state);
     }
   },
 });

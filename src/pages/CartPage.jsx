@@ -11,8 +11,13 @@ const CartPage = () => {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
-  const addToCartHandler = (item, qty) => {
-    dispatch(addToCart({ ...item, qty }));
+  const addToCartHandler = (item, qtyChange) => {
+    const newQty = item.qty + qtyChange;
+    if (newQty > 0) {
+      dispatch(addToCart({ ...item, qty: qtyChange }));
+    } else {
+      dispatch(removeFromCart(item.primary_isbn10));
+    }
   };
 
   const removeFromCartHandler = (isbn) => {
